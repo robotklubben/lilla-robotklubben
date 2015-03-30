@@ -1,0 +1,7 @@
+{
+  "name": "Robotklubben",
+  "description": "A teaching platform based on Node.js, reveal.js and blockly",
+  "repository": "",
+  "logo": "http://robotklubben.herokuapp.com/images/r0b.svg",
+  "keywords": ["node", "express", "static", "reveal.js", "blockly"]
+}

@@ -1,0 +1,109 @@
+doctype html
+html(lang='sv-se')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui')
+    meta(name='description', content='#{deckName}')
+    meta(name='author', content='#{deckAuthor}')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style' content='black-translucent')
+    title= appName
+    link(rel='icon', href='/images/favicon.ico')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/reveal.css')
+    link(rel='stylesheet', href='/stylesheets/theme/white.css', id='theme')
+    link(rel='stylesheet', href='/stylesheets/zenburn.css')
+    script.
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? '/stylesheets/pdf.css' : '/stylesheets/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+  body
+    div.reveal
+        div.logo(style='position: absolute; top: 20px; right: 20px; z-index: 500;')
+            a(href='/home')
+                img(src='/images/r0b_small.svg', height='100px; enabled= true') 
+        div.slides
+            block slides
+    script(src='/javascript/head.min.js')
+    script(src='/javascript/reveal.js')
+    if mode == 'master' 
+        script(src='/javascript/socket.io.min.js')
+        script.
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                mouseWheel: true,
+                margin: 0.1,
+                width: 1600,
+                height: 1080,
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+                backgroundTransition: 'slide',
+                multiplex: !{JSON.stringify(multiplex)},
+                dependencies: [
+                    { src: '/javascript/socket.io.min.js', async: true },
+                    { src: '/javascript/classList.js', condition: function() { return !document.body.classList; } },
+                    //{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    //{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '/javascript/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '/javascript/zoom.js', async: true },
+                    //{ src: 'plugin/notes/notes.js', async: true }
+                    { src: '/javascript/master.js', async: true }
+                    //{ src: 'plugin/notes-server/client.js', async: true }
+                ]
+            });
+            window.onbeforeunload = function () {
+                if ( window.location.search.match( /receiver/gi ) ) { return; }
+                var socket = io.connect('#{multiplex.url}');
+                console.log('Releasing channel #{multiplex.id}');
+                socket.emit('releasechannel', '#{multiplex.id}', '#{multiplex.secret}');
+            };
+    else if mode == 'client'
+        script.
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                history: true,
+                center: true,
+                touch: false,
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+                backgroundTransition: 'slide',
+                multiplex: !{JSON.stringify(multiplex)},
+                dependencies: [
+                    { src: '/javascript/classList.js', condition: function() { return !document.body.classList; } },
+                    //{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    //{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '/javascript/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '/javascript/zoom.js', async: true },
+                    //{ src: 'plugin/notes/notes.js', async: true }
+                    { src: '/javascript/socket.io.min.js', async: true },
+                    { src: '/javascript/client.js', async: true }
+                    //{ src: 'plugin/notes-server/client.js', async: true }
+                ]
+            });
+
+    else
+        script.
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                mouseWheel: true,
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+                backgroundTransition: 'slide',
+                dependencies: [
+                    { src: '/javascript/classList.js', condition: function() { return !document.body.classList; } },
+                    //{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    //{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '/javascript/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '/javascript/zoom.js', async: true }
+                    //{ src: 'plugin/notes/notes.js', async: true }
+                    //{ src: 'plugin/notes-server/client.js', async: true }
+                ]
+            });
+

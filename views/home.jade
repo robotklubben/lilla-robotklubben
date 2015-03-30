@@ -1,0 +1,17 @@
+extends layout
+
+block content
+	div.container
+		if message
+			div.alert.alert-warning(role='alert')
+				strong #{user.firstName},
+				|  #{message}
+		else
+			h1 Välkommen #{user.firstName}!
+			h3 Välj en av grupperna nedan
+			div.col-sm-6.col-md-4
+				h4
+					div.list-group
+						each displayName, name in resources
+							a.list-group-item(href='/group/#{name}') #{displayName}
+
