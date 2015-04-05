@@ -276,11 +276,26 @@ body {
 .blue {
   color: #0ea3e8;
 }
+.dark-blue {
+
+  color: #1134c9;
+}
 
 .green {
   color: #0d9f11;
 }
 
+.light-green {
+  color: #33ee30;
+}
+
+.pink {
+  color: #fd56ff;
+}
+
+.orange {
+  color: #f97e12;
+}
 span.bold {
   font-weight: bold;
 }
